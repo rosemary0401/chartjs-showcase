@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <script src="Chart.Core.min.js"></script>
+    <script src="Chart.Scatter.min.js"></script>
+  </head>
+  <body>
+    <canvas id="lineChart" width="1000" height="300"></canvas>
+    <script>
+      
+      var ctxLine = document.getElementById("lineChart");
+      var lineChart = new Chart(ctxLine).Scatter(
+        data, options);
+    </script>
+  </body>
+</html>
