@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barChartTop" width="1000" height="300"></canvas>
+    <canvas id="barChartMid" width="1000" height="300"></canvas>
+    <canvas id="barChartBot" width="1000" height="300"></canvas>
+    <script>
+      var ctxBar1 = document.getElementById("barChartTop");
+      var barChartTop = new Chart(ctxBar1, {
+        type: 'line',
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            fill: false
+          }]
+        }
+      });
+
+      var ctxBar2 = document.getElementById("barChartMid");
+      var barChartMid = new Chart(ctxBar2, {
+        type: 'line',
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            fill: false
+          }]
+        },
+        options: {  
+          scales: {
+            xAxes: [{
+              afterTickToLabelConversion: function(data){
+                var xLabels = data.ticks;
+                xLabels.forEach(function (labels, i) {
+                  if (i % 2 == 1) {
+                    xLabels[i] = '';
+                  }
+                });
+              } 
+            }]   
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
