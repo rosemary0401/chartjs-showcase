@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barChartBot" width="1000" height="300"></canvas>
+    <script>
+      var ctxBar3 = document.getElementById("barChartBot");
+      var barChartBot = new Chart(ctxBar3, {
+        type: 'line',
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [{
+            label: '# of Votes',
+            data: [120000, 190000, 30000, 50000, 20000, 30000],
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            fill: false
+          }]
+        },
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                var value = data.datasets[0].data[tooltipItem.index];
+                value = value.toString();
+                value = value.split(/(?=(?:...)*$)/);
+                value = value.join(',');
+                return value;
+              }
+            }
+          },
+          elements: {
+            line: {
+              tension: 0
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
