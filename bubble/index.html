@@ -128,7 +128,7 @@
           }, {
             label: 'Vauldex',
             data: [{
-              x: 0.9, y: 0.4, r: 30, name: "Mr. Exchange", tag: "B2C"
+              x: 0.9, y: 0.4, r: 30, name: "Mr. Exchange", tag: "B2C,Offshore"
             }],
             backgroundColor: '#000000'
           }, {
@@ -169,7 +169,16 @@
                 }
               }
             }
-          }
+          }, 
+          scales: {
+            yAxes: [{
+              scaleLabel: { display: true, labelString: 'Requirements'
+              }
+            }],
+            xAxes: [{
+              scaleLabel: { display: true, labelString: 'Technology' }
+            }]
+          } 
         }
       });
     </script>
