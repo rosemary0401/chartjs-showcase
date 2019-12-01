@@ -5,6 +5,7 @@
   <body>
     <canvas id="basicBubble" width="500" height="500"></canvas>
     <canvas id="advBubble" width="500" height="500"></canvas>
+    <canvas id="agileBubble" width="500" height="500"></canvas>
     <script>
       var ctxbb = document.getElementById("basicBubble");
       var basicBubble = new Chart(ctxbb, {
@@ -71,6 +72,101 @@
               label: function(tooltipItem, data) {
                 var value = data.datasets[0].data[tooltipItem.index];
                 return value.name;
+              }
+            }
+          }
+        }
+      });
+
+      var ctxagb = document.getElementById("agileBubble");
+      var agileBubble = new Chart(ctxagb, {
+        type: 'bubble',
+        data: {
+          datasets: [{
+            label: 'Simple',
+            data: [{
+              x: 0, y: 0, r: 250, name: "Simple", area: true
+            }],
+            backgroundColor: 'rgba(255,205,86,0.2)',
+            borderColor: 'rgba(255,205,86,1)',
+            borderWidth: 1,
+          }, {
+            label: 'Complicated',
+            data: [{
+              x: 0, y: 0, r: 500, name: "Complicated", area: true
+            }],
+            backgroundColor: 'rgba(54,162,235,0.2)',
+            borderColor: 'rgba(54,162,235,1)',
+            borderWidth: 1,
+          }, {
+            label: 'Chaotic',
+            data: [{
+              x: 1, y: 1, r: 250, name: "Chaotic", area: true
+            }],
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+          }, {
+            label: 'KPMG',
+            data: [{
+              // pm:1, dm:1, dev:5
+              x: 0.4, y: 0.3, r: 7, name: "Entry Sheet AI", tag: "B2B,Internal"
+            }, {
+              // pm:2, dm:1, dev:3, ds: 3
+              x: 0.75, y: 0.2, r: 9, name: "Cognitive Contract Management", tag: "B2B,Internal"
+            }, {
+              // pm:1, dm:1, dev:2
+              x: 0.25, y: 0.1, r: 4, name: "Cashflow Manager", tag: "Internal"
+            }, {
+              // pm:1, dm:1, dev:3
+              x: 0.1, y: 0.1, r: 5, name: "Survey Platform", tag: "Internal"
+            }, {
+              // pm:1, dm:1, dev:3
+              x: 0.8, y: 0.85, r: 5, name: "jFlying", tag: "Prototype"
+            }],
+            backgroundColor: '#08519A'
+          }, {
+            label: 'Vauldex',
+            data: [{
+              x: 0.9, y: 0.4, r: 30, name: "Mr. Exchange", tag: "B2C"
+            }],
+            backgroundColor: '#000000'
+          }, {
+            label: 'TrendMicro',
+            data: [{
+              x: 0.35, y: 0.3, r: 40, name: "Control Manager (Development Group)", tag: "B2B"
+            }, {
+              x: 0.25, y: 0.3, r: 10, name: "Control Manager (Maintenance Group)", tag: "B2B"
+            }],
+            backgroundColor: '#D93F2A'
+          }, {
+            label: 'AVerMedia',
+            data: [{
+              x: 0.15, y: 0.1, r: 6, name: "AVerTV", tag: "B2B,B2C"
+            }],
+            backgroundColor: '#1C1C67'
+          }, {
+            label: 'Cyberlink',
+            data: [{
+              x: 0.2, y: 0.2, r: 7, name: "MediaEspresso", tag: "B2B,B2C"
+            }],
+            backgroundColor: '#000000'
+          }]
+        },
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                
+                if ("area" in value) {
+                  return value.name;
+                } else {
+                  return [
+                    value.name, 
+                    "Team members: " + value.r.toString()
+                  ].concat(value.tag.split(","));
+                }
               }
             }
           }
