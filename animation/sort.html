@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barChart" width="1000" height="300"></canvas>
+    <button id="btnUpdate">update me</button>
+    <script>
+      let myData = [
+        { label: "Red", num: 12, bgColor: 'rgba(255, 99, 132, 0.2)', bColor: 'rgba(255,99,132,1)' },
+        { label: "Blue", num: 19, bgColor: 'rgba(54, 162, 235, 0.2)', bColor: 'rgba(54, 162, 235, 1)' },
+        { label: "Yellow", num: 3, bgColor: 'rgba(255, 206, 86, 0.2)', bColor: 'rgba(255, 206, 86, 1)' },
+        { label: "Green", num: 5, bgColor: 'rgba(75, 192, 192, 0.2)', bColor: 'rgba(75, 192, 192, 1)' }
+      ];
+      
+      let barData = {
+        labels: myData.map(a => a.label),
+        datasets: [{
+          label: '# of Votes',
+          data: myData.map(a => a.num),
+          backgroundColor: myData.map(a => a.bgColor),
+          borderColor: myData.map(a => a.bColor),
+          borderWidth: 1
+        }]
+      };
+
+      window.onload = function() {
+        var ctxBar = document.getElementById("barChart");
+        window.myBar = new Chart(ctxBar, {
+          type: 'bar',
+          data: barData,
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+      }
+
+      document.getElementById('btnUpdate').addEventListener('click', function() {
+        barData.datasets.forEach(function(dataset) {
+          for (let i = 0; i < myData.length; i++) {
+            let value = Math.floor(Math.random() * 10);
+            myData[i].num += value;
+          }
+
+          myData.sort(function(l, r) {
+            return r.num - l.num;
+          });
+
+          barData.labels = myData.map(a => a.label);
+          dataset.data = myData.map(a => a.num);
+          dataset.backgroundColor = myData.map(a => a.bgColor);
+          dataset.borderColor = myData.map(a => a.bColor);
+
+          window.myBar.update();
+        });
+        
+        
+      });
+    </script>
+  </body>
+</html>
