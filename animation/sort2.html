@@ -42,6 +42,17 @@
       var myBar = new Chart(ctxBar, {
         type: 'horizontalBar',
         data: chartData,
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem) {
+                console.log(tooltipItem);
+                return "$" + Number(tooltipItem.xLabel) + " and so worth it !";
+              }
+            },
+            mode: 'single'
+          }
+        }
       });
 
       document.getElementById('btnUpdate').addEventListener('click', function() {
