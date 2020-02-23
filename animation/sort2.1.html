@@ -49,26 +49,18 @@
             chart.options.tooltips.enabled = false;
           }
         },
-        beforeDraw: function (chart, easing) {
-          // console.log(easing);
-        },
         afterDraw: function (chart, easing) {
-          // console.log(easing);
           if (chart.config.options.showAllTooltips) {
-            // Don't do anything till the animation runs atleast once
-            // if (!chart.allTooltipsOnce) {
-            //   if (easing !== 1)
-            //     return;
-            //   chart.allTooltipsOnce = true;
-            // }
-
             chart.options.tooltips.enabled = true;
             Chart.helpers.each(chart.pluginTooltips, function (tooltip, idx) {
-              // console.log(Math.round(tooltip._data.datasets[idx].data[0] * easing));
+              tooltip._options.callbacks.label = function(tooltipItem) {
+                return Number(Math.round(tooltipItem.xLabel * easing));
+              };
+              
               tooltip.initialize();
               tooltip.update();
-              // we don't actually need this since we are not animating tooltips
-              // tooltip.pivot();
+              // make tooltips close to bar
+              tooltip.pivot();
               tooltip.transition(easing).draw();
             });
             chart.options.tooltips.enabled = false;
@@ -101,11 +93,11 @@
         options: {
           showAllTooltips: true,
           tooltips: {
-            callbacks: {
-              label: function(tooltipItem) {
-                return Number(tooltipItem.xLabel);
-              }
-            },
+            // callbacks: {
+            //   label: function(tooltipItem) {
+            //     return Number(tooltipItem.xLabel);
+            //   }
+            // },
             displayColors: false,
             backgroundColor: 'rgba(0, 0, 0, 0)',
             bodyFontSize: 24,
@@ -116,6 +108,7 @@
           animation: {
             duration: 3000,
           },
+          events: []
         }
       });
 
