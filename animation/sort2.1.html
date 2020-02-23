@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barChart" width="1000" height="300"></canvas>
+    <button id="btnGo">Go</button>
+    <script>
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      Chart.plugins.register({
+        beforeUpdate: function(chart) {
+          var arr = [];
+          $.each(chart.data.datasets, function(){
+            arr.push(this.data);
+          });
+
+          var indexes = arr.map((d, i) => i);
+          indexes.sort((l, r) => {
+            return arr[r] - arr[l];
+          });
+
+          var temp = [];
+          $.each(indexes, function(){
+            temp.push(chart.data.datasets[this]);
+          });
+
+          chart.data.datasets = temp;
+        }
+      });
+
+      let rawDataIdx = 0;
+      const rawData = [
+        { "Tokyo": 22, "Fukuoka": 34, "Kyoto": 13, "Osaka": 16 },
+        { "Tokyo": 50, "Fukuoka": 45, "Kyoto": 24, "Osaka": 22 },
+        { "Tokyo": 61, "Fukuoka": 49, "Kyoto": 30, "Osaka": 40 },
+        { "Tokyo": 65, "Fukuoka": 56, "Kyoto": 44, "Osaka": 53 },
+        { "Tokyo": 79, "Fukuoka": 80, "Kyoto": 47, "Osaka": 60 }
+      ];
+
+      const chartData = {
+        labels: ["My Labels"],
+        datasets: [
+          { label: "Tokyo", data: [12], stack: 1, backgroundColor: 'rgba(255, 99, 132, 0.2)', borderColor: 'rgba(255,99,132,1)' },
+          { label: "Fukuoka", data: [19], stack: 2, backgroundColor: 'rgba(54, 162, 235, 0.2)', borderColor: 'rgba(54, 162, 235, 1)' },
+          { label: "Kyoto", data: [3], stack: 3, backgroundColor: 'rgba(255, 206, 86, 0.2)', borderColor: 'rgba(255, 206, 86, 1)' },
+          { label: "Osaka", data: [5], stack: 4, backgroundColor: 'rgba(75, 192, 192, 0.2)', borderColor: 'rgba(75, 192, 192, 1)' }
+        ]
+      };
+
+      const ctxBar = document.getElementById("barChart");
+      var myBar = new Chart(ctxBar, {
+        type: 'horizontalBar',
+        data: chartData,
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return "$" + Number(tooltipItem.xLabel) + " and so worth it !";
+              }
+            },
+            mode: 'single'
+          }
+        }
+      });
+
+      document.getElementById('btnGo').addEventListener('click', async function() {
+        while (rawDataIdx < rawData.length) {
+          console.log(rawDataIdx);
+
+          myBar.data.datasets.forEach(function(dataset) {
+            dataset.data[0] += rawData[rawDataIdx][dataset.label];
+          });
+          
+          rawDataIdx += 1;
+          myBar.options.sort = true;
+          myBar.update();
+          myBar.options.sort = false;
+
+          await sleep(500);
+        }
+      });
+    </script>
+  </body>
+</html>
