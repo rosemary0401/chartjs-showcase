@@ -29,6 +29,50 @@
           });
 
           chart.data.datasets = temp;
+        },
+        beforeRender: function (chart) {
+          if (chart.config.options.showAllTooltips) {
+            // create an array of tooltips, we can't use the chart tooltip because there is only one tooltip per chart
+            chart.pluginTooltips = [];
+            chart.config.data.datasets.forEach(function (dataset, i) {
+              chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+                chart.pluginTooltips.push(new Chart.Tooltip({
+                  _chart: chart.chart,
+                  _chartInstance: chart,
+                  _data: chart.data,
+                  _options: chart.options.tooltips,
+                  _active: [sector]
+                }, chart));
+              });
+            });
+
+            chart.options.tooltips.enabled = false;
+          }
+        },
+        beforeDraw: function (chart, easing) {
+          // console.log(easing);
+        },
+        afterDraw: function (chart, easing) {
+          // console.log(easing);
+          if (chart.config.options.showAllTooltips) {
+            // Don't do anything till the animation runs atleast once
+            // if (!chart.allTooltipsOnce) {
+            //   if (easing !== 1)
+            //     return;
+            //   chart.allTooltipsOnce = true;
+            // }
+
+            chart.options.tooltips.enabled = true;
+            Chart.helpers.each(chart.pluginTooltips, function (tooltip, idx) {
+              // console.log(Math.round(tooltip._data.datasets[idx].data[0] * easing));
+              tooltip.initialize();
+              tooltip.update();
+              // we don't actually need this since we are not animating tooltips
+              // tooltip.pivot();
+              tooltip.transition(easing).draw();
+            });
+            chart.options.tooltips.enabled = false;
+          }
         }
       });
 
@@ -42,7 +86,6 @@
       ];
 
       const chartData = {
-        labels: ["My Labels"],
         datasets: [
           { label: "Tokyo", data: [12], stack: 1, backgroundColor: 'rgba(255, 99, 132, 0.2)', borderColor: 'rgba(255,99,132,1)' },
           { label: "Fukuoka", data: [19], stack: 2, backgroundColor: 'rgba(54, 162, 235, 0.2)', borderColor: 'rgba(54, 162, 235, 1)' },
@@ -56,14 +99,23 @@
         type: 'horizontalBar',
         data: chartData,
         options: {
+          showAllTooltips: true,
           tooltips: {
             callbacks: {
               label: function(tooltipItem) {
-                return "$" + Number(tooltipItem.xLabel) + " and so worth it !";
+                return Number(tooltipItem.xLabel);
               }
             },
+            displayColors: false,
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            bodyFontSize: 24,
+            bodyFontColor: 'rgba(0, 0, 0, 1)',
+            xAlign: 'right',
             mode: 'single'
-          }
+          },
+          animation: {
+            duration: 3000,
+          },
         }
       });
 
@@ -72,7 +124,7 @@
           console.log(rawDataIdx);
 
           myBar.data.datasets.forEach(function(dataset) {
-            dataset.data[0] += rawData[rawDataIdx][dataset.label];
+            dataset.data[0] = rawData[rawDataIdx][dataset.label];
           });
           
           rawDataIdx += 1;
@@ -80,7 +132,7 @@
           myBar.update();
           myBar.options.sort = false;
 
-          await sleep(500);
+          await sleep(2000);
         }
       });
     </script>
