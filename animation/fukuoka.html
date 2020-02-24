@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barChart" width="1000" height="300"></canvas>
+    <button id="btnGo">Go</button>
+    <script>
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      Chart.plugins.register({
+        beforeUpdate: function(chart) {
+          var arr = [];
+          $.each(chart.data.datasets, function(){
+            arr.push(this.data);
+          });
+
+          var indexes = arr.map((d, i) => i);
+          indexes.sort((l, r) => {
+            return arr[r] - arr[l];
+          });
+
+          var temp = [];
+          $.each(indexes, function(){
+            temp.push(chart.data.datasets[this]);
+          });
+
+          chart.data.datasets = temp;
+        },
+        beforeRender: function (chart) {
+          if (chart.config.options.showAllTooltips) {
+            // create an array of tooltips, we can't use the chart tooltip because there is only one tooltip per chart
+            chart.pluginTooltips = [];
+            chart.config.data.datasets.forEach(function (dataset, i) {
+              chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+                chart.pluginTooltips.push(new Chart.Tooltip({
+                  _chart: chart.chart,
+                  _chartInstance: chart,
+                  _data: chart.data,
+                  _options: chart.options.tooltips,
+                  _active: [sector]
+                }, chart));
+              });
+            });
+
+            chart.options.tooltips.enabled = false;
+          }
+        },
+        afterDraw: function (chart, easing) {
+          if (chart.config.options.showAllTooltips) {
+            chart.options.tooltips.enabled = true;
+            Chart.helpers.each(chart.pluginTooltips, function (tooltip, idx) {
+              tooltip._options.callbacks.label = function(tooltipItem) {
+                return Number(Math.round(tooltipItem.xLabel * easing));
+              };
+              
+              tooltip.initialize();
+              tooltip.update();
+              // make tooltips close to bar
+              tooltip.pivot();
+              tooltip.transition(easing).draw();
+            });
+            chart.options.tooltips.enabled = false;
+          }
+        }
+      });
+
+      let rawDataIdx = 0;
+      const rawData = [
+        // { "year": 2003, "Higashi-ku": 273926, "Hakata-ku": 186753, "Chuo-ku": 160636, "Minami-ku": 247356, "Nishi-ku": 174568, "Jonan-ku": 126927, "Sawara-ku": 205742},
+        { "year": 2004, "Higashi-ku": 275292, "Hakata-ku": 189367, "Chuo-ku": 163483, "Minami-ku": 248198, "Nishi-ku": 176903, "Jonan-ku": 127725, "Sawara-ku": 207272},
+        { "year": 2005, "Higashi-ku": 275652, "Hakata-ku": 190178, "Chuo-ku": 163975, "Minami-ku": 247913, "Nishi-ku": 177625, "Jonan-ku": 127952, "Sawara-ku": 207851},
+        // { "year": 2006, "Higashi-ku": , "Hakata-ku": , "Chuo-ku": , "Minami-ku": , "Nishi-ku": , "Jonan-ku": , "Sawara-ku":},
+        { "year": 2007, "Higashi-ku": 276978, "Hakata-ku": 198743, "Chuo-ku": 170264, "Minami-ku": 247380, "Nishi-ku": 181753, "Jonan-ku": 128719, "Sawara-ku": 210580},
+        { "year": 2008, "Higashi-ku": 281635, "Hakata-ku": 201729, "Chuo-ku": 172264, "Minami-ku": 247107, "Nishi-ku": 183614, "Jonan-ku": 129067, "Sawara-ku": 211308},
+        { "year": 2009, "Higashi-ku": 288536, "Hakata-ku": 209937, "Chuo-ku": 175052, "Minami-ku": 248411, "Nishi-ku": 188085, "Jonan-ku": 128844, "Sawara-ku": 211973},
+        // { "year": 2010, "Higashi-ku": , "Hakata-ku": , "Chuo-ku": , "Minami-ku": , "Nishi-ku": , "Jonan-ku": , "Sawara-ku": },
+        { "year": 2011, "Higashi-ku": 295867, "Hakata-ku": 216035, "Chuo-ku": 181600, "Minami-ku": 248290, "Nishi-ku": 195163, "Jonan-ku": 129310, "Sawara-ku": 213168},
+        { "year": 2012, "Higashi-ku": 297796, "Hakata-ku": 218869, "Chuo-ku": 184402, "Minami-ku": 250462, "Nishi-ku": 197721, "Jonan-ku": 129298, "Sawara-ku": 213706},
+        { "year": 2013, "Higashi-ku": 300410, "Hakata-ku": 221857, "Chuo-ku": 187142, "Minami-ku": 252900, "Nishi-ku": 200475, "Jonan-ku": 129360, "Sawara-ku": 214169},
+        { "year": 2014, "Higashi-ku": 302749, "Hakata-ku": 225343, "Chuo-ku": 189430, "Minami-ku": 253605, "Nishi-ku": 202804, "Jonan-ku": 130028, "Sawara-ku": 215390},
+        { "year": 2015, "Higashi-ku": 306015, "Hakata-ku": 228441, "Chuo-ku": 192688, "Minami-ku": 255797, "Nishi-ku": 206868, "Jonan-ku": 130995, "Sawara-ku": 217877},
+        { "year": 2016, "Higashi-ku": 310395, "Hakata-ku": 233036, "Chuo-ku": 194725, "Minami-ku": 257801, "Nishi-ku": 208610, "Jonan-ku": 131061, "Sawara-ku": 218150},
+        { "year": 2017, "Higashi-ku": 313575, "Hakata-ku": 236859, "Chuo-ku": 196787, "Minami-ku": 259478, "Nishi-ku": 210469, "Jonan-ku": 131242, "Sawara-ku": 218779},
+        { "year": 2018, "Higashi-ku": 315525, "Hakata-ku": 239905, "Chuo-ku": 198563, "Minami-ku": 262113, "Nishi-ku": 212106, "Jonan-ku": 132133, "Sawara-ku": 219105},
+        { "year": 2019, "Higashi-ku": 318842, "Hakata-ku": 243559, "Chuo-ku": 201440, "Minami-ku": 263782, "Nishi-ku": 212417, "Jonan-ku": 132568, "Sawara-ku": 220049},
+      ];
+
+  //     // red: 'rgb(255, 99, 132)',
+	// // orange: '',
+	// yellow: '',
+	// // green: 'rgb(75, 192, 192)',
+	// blue: 'rgb(54, 162, 235)',
+	// purple: '',
+	// grey: ''
+
+      const chartData = {
+        datasets: [
+          { label: "Higashi-ku", data: [273926], stack: 1, backgroundColor: 'rgba(255, 99, 132, 0.2)', borderColor: 'rgba(255, 99, 132, 1)' },
+          { label: "Minami-ku", data: [247356], stack: 2, backgroundColor: 'rgba(255, 159, 64, 0.2)', borderColor: 'rgba(255, 159, 64, 1)' },
+          { label: "Sawara-ku", data: [205742], stack: 3, backgroundColor: 'rgba(201, 203, 207, 0.2)', borderColor: 'rgba(201, 203, 207, 1)' },
+          { label: "Hakata-ku", data: [186753], stack: 4, backgroundColor: 'rgba(54, 162, 235, 0.2)', borderColor: 'rgba(54, 162, 235, 1)' },
+          { label: "Nishi-ku", data: [174568], stack: 5, backgroundColor: 'rgba(153, 102, 255, 0.2)', borderColor: 'rgba(153, 102, 255, 1)' },
+          { label: "Chuo-ku", data: [160636], stack: 6, backgroundColor: 'rgba(255, 206, 86, 0.2)', borderColor: 'rgba(255, 206, 86, 1)' },
+          { label: "Jonan-ku", data: [126927], stack: 7, backgroundColor: 'rgba(75, 192, 192, 0.2)', borderColor: 'rgba(75, 192, 192, 1)' } 
+        ]
+      };
+
+      const ctxBar = document.getElementById("barChart");
+      var myBar = new Chart(ctxBar, {
+        type: 'horizontalBar',
+        data: chartData,
+        options: {
+          showAllTooltips: true,
+          tooltips: {
+            // callbacks: {
+            //   label: function(tooltipItem) {
+            //     return Number(tooltipItem.xLabel);
+            //   }
+            // },
+            displayColors: false,
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            bodyFontSize: 24,
+            bodyFontColor: 'rgba(0, 0, 0, 1)',
+            xAlign: 'right',
+            mode: 'single'
+          },
+          animation: {
+            duration: 3000,
+          },
+          events: []
+        }
+      });
+
+      document.getElementById('btnGo').addEventListener('click', async function() {
+        while (rawDataIdx < rawData.length) {
+          console.log(rawDataIdx);
+
+          myBar.data.datasets.forEach(function(dataset) {
+            dataset.data[0] = rawData[rawDataIdx][dataset.label];
+          });
+          
+          rawDataIdx += 1;
+          myBar.options.sort = true;
+          myBar.update();
+          myBar.options.sort = false;
+
+          await sleep(2000);
+        }
+      });
+    </script>
+  </body>
+</html>
