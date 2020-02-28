@@ -54,7 +54,10 @@
             chart.options.tooltips.enabled = true;
             Chart.helpers.each(chart.pluginTooltips, function (tooltip, idx) {
               tooltip._options.callbacks.label = function(tooltipItem) {
-                return Number(Math.round(tooltipItem.xLabel * easing));
+                const lo = rawData[rawDataIdx-1][chartData.datasets[tooltipItem.datasetIndex].label];
+                const hi = tooltipItem.xLabel;
+                const num = lo + (hi - lo) * easing;
+                return Number(Math.round(num));
               };
               
               tooltip.initialize();
@@ -68,9 +71,9 @@
         }
       });
 
-      let rawDataIdx = 0;
+      let rawDataIdx = 1;
       const rawData = [
-        // { "year": 2003, "Higashi-ku": 273926, "Hakata-ku": 186753, "Chuo-ku": 160636, "Minami-ku": 247356, "Nishi-ku": 174568, "Jonan-ku": 126927, "Sawara-ku": 205742},
+        { "year": 2003, "Higashi-ku": 273926, "Hakata-ku": 186753, "Chuo-ku": 160636, "Minami-ku": 247356, "Nishi-ku": 174568, "Jonan-ku": 126927, "Sawara-ku": 205742},
         { "year": 2004, "Higashi-ku": 275292, "Hakata-ku": 189367, "Chuo-ku": 163483, "Minami-ku": 248198, "Nishi-ku": 176903, "Jonan-ku": 127725, "Sawara-ku": 207272},
         { "year": 2005, "Higashi-ku": 275652, "Hakata-ku": 190178, "Chuo-ku": 163975, "Minami-ku": 247913, "Nishi-ku": 177625, "Jonan-ku": 127952, "Sawara-ku": 207851},
         // { "year": 2006, "Higashi-ku": , "Hakata-ku": , "Chuo-ku": , "Minami-ku": , "Nishi-ku": , "Jonan-ku": , "Sawara-ku":},
@@ -88,14 +91,6 @@
         { "year": 2018, "Higashi-ku": 315525, "Hakata-ku": 239905, "Chuo-ku": 198563, "Minami-ku": 262113, "Nishi-ku": 212106, "Jonan-ku": 132133, "Sawara-ku": 219105},
         { "year": 2019, "Higashi-ku": 318842, "Hakata-ku": 243559, "Chuo-ku": 201440, "Minami-ku": 263782, "Nishi-ku": 212417, "Jonan-ku": 132568, "Sawara-ku": 220049},
       ];
-
-  //     // red: 'rgb(255, 99, 132)',
-	// // orange: '',
-	// yellow: '',
-	// // green: 'rgb(75, 192, 192)',
-	// blue: 'rgb(54, 162, 235)',
-	// purple: '',
-	// grey: ''
 
       const chartData = {
         datasets: [
@@ -129,7 +124,7 @@
             mode: 'single'
           },
           animation: {
-            duration: 3000,
+            duration: 3800,
           },
           events: []
         }
@@ -143,12 +138,12 @@
             dataset.data[0] = rawData[rawDataIdx][dataset.label];
           });
           
-          rawDataIdx += 1;
           myBar.options.sort = true;
           myBar.update();
           myBar.options.sort = false;
 
           await sleep(2000);
+          rawDataIdx += 1;
         }
       });
     </script>
