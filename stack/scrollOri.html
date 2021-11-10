@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+  </head>
+  <style>
+    .chartWrapper {
+      position: relative;
+      overflow: auto;
+    }
+
+    .chartWrapper > canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      pointer-events:none;
+    }
+
+    .chartAreaWrapper {
+      width: 2000px;
+      overflow-x: scroll;
+    }
+  </style>
+  <body>
+    <div class="chartWrapper">
+      <div class="chartAreaWrapper">
+        <canvas id="barChart2" height="400" width="2000"></canvas>
+      </div>
+    </div>
+    <h2>Scroll Me</h2>
+    <script>
+      var ctxBar2 = document.getElementById("barChart2");
+      const data = {
+        labels: ["a", "b", "c", "d", "e", "f"],
+        datasets: [
+          {
+            label: 'Dataset 1',
+            data: [50, 100, 200, 100, 100, 50],
+            backgroundColor: '#FF0000',
+          },
+          {
+            label: 'Dataset 2',
+            data: [50, 100, 200, 100, 100, 50],
+            backgroundColor: '#00FF00',
+          },
+          {
+            label: 'Dataset 3',
+            data: [50, 100, 200, 100, 100, 50],
+            backgroundColor: '#0000FF',
+          },
+        ]
+      };
+      
+      const config = {
+        type: 'bar',
+        data: data,
+        options: {
+          plugins: {
+            title: {
+              align: 'start',
+              display: true,
+              text: 'Chart.js Bar Chart - Stacked'
+            },
+            legend: {
+              align: 'start'
+            }
+          },
+          responsive: true,
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true
+            }
+          }
+        }
+      };
+      
+      var barChart2 = new Chart(ctxBar2, config);
+    </script>
+  </body>
+</html>
