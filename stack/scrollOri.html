@@ -6,6 +6,7 @@
     .chartWrapper {
       position: relative;
       overflow: auto;
+      border: 1px solid black;
     }
 
     .chartWrapper > canvas {
@@ -21,31 +22,38 @@
     }
   </style>
   <body>
+    <h2>Scroll Me</h2>
     <div class="chartWrapper">
       <div class="chartAreaWrapper">
         <canvas id="barChart2" height="400" width="2000"></canvas>
       </div>
     </div>
-    <h2>Scroll Me</h2>
     <script>
       var ctxBar2 = document.getElementById("barChart2");
       const data = {
-        labels: ["a", "b", "c", "d", "e", "f"],
+        labels: ["a", "b", "c", "d", "e", "f", "g"],
         datasets: [
           {
-            label: 'Dataset 1',
-            data: [50, 100, 200, 100, 100, 50],
-            backgroundColor: '#FF0000',
+            label: '1 Green',
+            data: [50, 100, 200, 100, 100, 50, 100],
+            backgroundColor: 'green',
           },
           {
-            label: 'Dataset 2',
-            data: [50, 100, 200, 100, 100, 50],
-            backgroundColor: '#00FF00',
+            label: '2 white',
+            data: [50, 100, 200, 100, 100, 50, 100],
+            backgroundColor: 'lightgray',
+            borderColor: 'black',
+            borderWidth: 1
           },
           {
-            label: 'Dataset 3',
-            data: [50, 100, 200, 100, 100, 50],
-            backgroundColor: '#0000FF',
+            label: '3 black',
+            data: [50, 100, 200, 100, 100, 50, 100],
+            backgroundColor: 'black',
+          },
+          {
+            label: '4 yellow',
+            data: [50, 100, 200, 100, 100, 50, 100],
+            backgroundColor: 'gold',
           },
         ]
       };
@@ -68,6 +76,11 @@
           scales: {
             x: {
               stacked: true,
+              ticks: {
+                font: {
+                    size: 20,
+                }
+              }
             },
             y: {
               stacked: true
