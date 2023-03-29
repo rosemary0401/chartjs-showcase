@@ -1,0 +1,201 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barChart" width="1000" height="300"></canvas>
+    <button id="btnUpdate">update me</button>
+    <script>
+      const theData = [
+        {
+          "year": 2022,
+          "country": {
+            "中國": 424,
+            "日本": 17548,
+            "其他": 21186
+          }
+        },
+        {
+          "year": 2021,
+          "country": {
+            "中國": 4158,
+            "日本": 17919,
+            "其他": 29527
+          }
+        },
+        {
+          "year": 2020,
+          "country": {
+            "中國": 42121,
+            "日本": 2171,
+            "其他": 46285
+          }
+        },
+        {
+          "year": 2019,
+          "country": {
+            "中國": 51112,
+            "日本": 1041,
+            "其他": 52679
+          }
+        },
+        {
+          "year": 2018,
+          "country": {
+            "中國": 31311,
+            "日本": 698,
+            "其他": 32429
+          }
+        },
+        {
+          "year": 2017,
+          "country": {
+            "中國": 26811,
+            "日本": 668,
+            "其他": 27717
+          }
+        },
+        {
+          "year": 2016,
+          "country": {
+            "中國": 27855,
+            "日本": 1136,
+            "其他": 29551
+          }
+        },
+        {
+          "year": 2015,
+          "country": {
+            "中國": 21485,
+            "日本": 1265,
+            "其他": 23629
+          }
+        },
+        {
+          "year": 2014,
+          "country": {
+            "中國": 8183,
+            "日本": 920,
+            "其他": 9539
+          }
+        },
+        {
+          "year": 2013,
+          "country": {
+            "中國": 4034,
+            "日本": 904,
+            "其他": 5259
+          }
+        },
+        {
+          "year": 2012,
+          "country": {
+            "中國": 3600,
+            "日本": 739,
+            "其他": 4663
+          }
+        },
+        {
+          "year": 2011,
+          "country": {
+            "中國": 2085,
+            "日本": 921,
+            "其他": 3376
+          }
+        },
+        {
+          "year": 2010,
+          "country": {
+            "中國": 1111,
+            "日本": 1004,
+            "其他": 2492
+          }
+        },
+        {
+          "year": 2009,
+          "country": {
+            "中國": 737,
+            "日本": 868,
+            "其他": 1925
+          }
+        },
+        {
+          "year": 2008,
+          "country": {
+            "中國": 95,
+            "日本": 672,
+            "其他": 978
+          }
+        }
+      ];
+
+      const CHART_COLORS = [
+        '#4dc9f6',
+        '#f67019',
+        '#f53794',
+        '#537bc4',
+        '#acc236',
+        '#166a8f',
+        '#00a950',
+        '#58595b',
+        '#8549ba'
+      ];
+
+      const data = {
+        labels: ['aaa', 'bbb', 'ccc', 'dd'],
+        datasets: [
+          {
+            label: 'Dataset 1',
+            data: [50, 100, 200, 100],
+            backgroundColor: CHART_COLORS[0],
+          },
+          {
+            label: 'Dataset 2',
+            data: [50, 100, 200, 100],
+            backgroundColor: CHART_COLORS[1],
+          },
+          {
+            label: 'Dataset 3',
+            data: [50, 100, 200, 100],
+            backgroundColor: CHART_COLORS[2],
+          }
+        ]
+      };
+
+      window.onload = function() {
+        var ctxBar = document.getElementById("barChart");
+        window.myBar = new Chart(ctxBar, {
+          type: 'bar',
+          data: data,
+          options: {
+            plugins: {
+              title: {
+                display: true,
+                text: 'Chart.js Bar Chart - Stacked'
+              },
+            },
+            responsive: true,
+            scales: {
+              x: {
+                stacked: true,
+              },
+              y: {
+                stacked: true
+              }
+            }
+          }
+        });
+      }
+
+      document.getElementById('btnUpdate').addEventListener('click', function() {
+        // lineData.datasets.forEach(function(dataset) {
+        //   for (let i = 0; i < dataset.data.length; i++) {
+        //     let value = Math.floor(Math.random() * 10);
+        //     dataset.data[i] = dataset.data[i] + value;
+        //   }
+        // });
+        // window.myBar.update();
+      });
+    </script>
+  </body>
+</html>
