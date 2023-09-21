@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hello Table</title>
+  <meta charset="utf-8" />
+  <style>
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="js/global.js"></script>
+  <script src="js/vvc.js"></script>
+  <script src="js/fvc.js"></script>
+  <script src="js/ffiber.js"></script>
+  <script src="js/vfiber.js"></script>
+  <script src="js/fpesticide.js"></script>
+  <script src="js/vpesticide.js"></script>
+  <script src="js/uspesticide.js"></script>
+  <script src="js/cancer.js"></script>
+  <script>
+  // console.log(collector);
+  function createDiv(did) {
+    return $("<div>", {
+      id: did,
+      css: {
+        "border": "1px solid #729c0b",
+        "display": "table"
+      }
+    });
+  }
+
+  function addHead(ele, parent) {
+    const theadStyle = "background: #729c0b; color: white; text-align: center; border-bottom: 1px solid #f7f7f7; padding: 10px;";
+    var tr = $('<tr>');
+    $.each(ele.columns, function(idx, ele) {
+      const td = $(`<td style="${theadStyle}">`).text(ele);
+      tr.append(td)
+    });
+    parent.append(tr);
+  }
+
+  function addLinks(arr) {
+    var divs = "";
+    $.each(arr, function(idx, ele) {
+      divs += `<div><a href="${ele.url}" target="blank">${ele.name}</a></div>`;
+    });
+    return divs;
+  }
+
+  function isNumTable(data) {
+    try {
+      return data[0].num !== undefined;
+    } catch(err) {
+      return false;
+    }
+  }
+
+  function extraStyle(ele, data) {
+    if (isNumTable(data)) {
+      const max = Math.max(...data.map(ele => ele.num)); 
+      const left = Math.round(ele.num / max * 100);
+      const right = left + 1;
+      return `background: linear-gradient(to right, #efefef ${left}%, white ${right}%);`;
+    } else {
+      return undefined;
+    }
+  }
+
+  function addBody(data, parent) {
+    $.each(data, function(idx, ele) {
+      const tbodyStyleBarChart = extraStyle(ele, data);
+
+      const tbodyStyle = "border-bottom: 1px solid #f7f7f7; padding: 10px;";
+      try {
+        $('<tr>').append(
+          $(`<td style="${tbodyStyle}">`).html(ele.d.tw),
+          $(`<td style="${tbodyStyle}">`).html(ele.d.cn),
+          $(`<td style="${tbodyStyle}">`).html(ele.d.en),
+          $(`<td style="${tbodyStyle}">`).html(ele.d.ja),
+          (tbodyStyleBarChart) ? $(`<td style="${tbodyStyle + tbodyStyleBarChart}">`).html(ele.num): "",
+          $(`<td style="${tbodyStyle}">`).html(addLinks(ele.d.plant)),
+          $(`<td style="${tbodyStyle}">`).html(addLinks(ele.d.cook)),
+          $(`<td style="${tbodyStyle}">`).html(addLinks(ele.d.process))
+        ).appendTo(parent);
+      } catch (err) {
+        $('<tr>').append(
+          $(`<td colspan="0" style="${tbodyStyle}">`).text("some missing data in global.js"),
+        ).appendTo(parent);
+      }
+    });
+  }
+
+  function createTable(ele) {
+    var table = $("<table border=0></table>");
+    var thead = $("<thead></thead>");
+    var tbody = $("<tbody></tbody>");
+    
+    addHead(ele, thead);
+    addBody(ele.data, tbody);
+
+    table.append(thead);
+    table.append(tbody);
+
+    return table;
+  }
+
+  function copy2clipboard() {
+    $("#htmlcode").select();
+    document.execCommand('copy');
+  }
+
+  function printAllTables() {
+    $.each(collector, function(idx, ele) {
+      const header = $("<h1>").text(ele.title);
+      var div = $("<div>").append(createDiv(ele.tag).append(createTable(ele)));
+      const button = $(`<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">`)
+        .text("Get HTML code")
+        .on("click", function() {
+          $('#htmlcode').val(div.html());
+        });
+      const hr = $("<hr>");
+
+      $('#tables').append(header);
+      $('#tables').append(div);
+      $('#tables').append(button);
+      $('#tables').append(hr);
+    });
+  }
+
+
+  $(document).ready(function() {
+    printAllTables();
+  });
+  </script>
+</head>
+<body>      
+  <div id="tables"></div>
+  <hr>
+  <h2>References:</h2>
+  <p><a href="https://www.cfs.gov.hk/english/programme/programme_rafs/programme_rafs_n_01_04_01_fruit_veg_report.html" target="blank">維他命C & 膳食纖維</a></p>
+  <p><a href="https://tw.appledaily.com/life/20190126/DGLFCEWAPMKX7DLQLMGZXYEEOA/" target="blank">台灣農藥</a></p>
+  <p><a href="https://heho.com.tw/archives/77891" target="blank">美國農藥(中文)</a></p>
+  <p><a href="https://draxe.com/health/dirty-dozen/" target="blank">美國農藥(英文)</a></p>
+</body>
+
+<div class="modal fade" id="infoModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h4 id="infoTitle" class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <textarea id="htmlcode" rows="10" style="width: 100%;">
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button claas="btn btn-primary" onclick="copy2clipboard();">Copy</button>
+        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</html>
