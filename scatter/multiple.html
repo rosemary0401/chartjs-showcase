@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  </head>
+  <body>
+    <canvas id="basicScatter" width="500" height="500"></canvas>
+    <script>
+      var ctxbs = document.getElementById("basicScatter");
+      var basicScatter = new Chart(ctxbs, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Scatter Dataset',
+            data: [{
+              x: -10,
+              y: 0
+            }, {
+              x: 0,
+              y: 10
+            }, {
+              x: 10,
+              y: 5
+            }],
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            pointRadius: 10,
+          }, {
+            label: 'Dataset 2',
+            data: [{
+              x: -3,
+              y: 5
+            }, {
+              x: 4,
+              y: 12
+            }, {
+              x: 1,
+              y: 7
+            }],
+            backgroundColor: 'rgba(99,132,255,0.2)',
+            borderColor: 'rgba(99,132,255,1)',
+            borderWidth: 1,
+            pointRadius: 15,
+          }]
+        },
+        options: {
+          scales: {
+            xAxes: [{
+              type: 'linear',
+              position: 'bottom'
+            }]
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
