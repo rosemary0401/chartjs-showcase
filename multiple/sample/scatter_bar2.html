@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+  </head>
+  <body>
+    <canvas id="scatterBar" width="1000" height="300"></canvas>
+    <script>
+      // The order matters
+      var ctxScatterBar = document.getElementById("scatterBar");
+      var scatterBar = new Chart(ctxScatterBar, {
+        type: 'bar',
+        data: {
+          labels: ["Img1", "Img2", "Img3", "Img4", "Img5"],
+          datasets: [{
+            label: 'Image res',
+            type: 'bubble',
+            data: [{
+              x: 0,
+              y: 0,
+              r: 5
+            }, {
+              x: 0,
+              y: 0,
+              r: 15
+            }, {
+              x: 0,
+              y: 0,
+              r: 7
+            }, {
+              x: 0,
+              y: 0,
+              r: 9
+            }, {
+              x: 0,
+              y: 0,
+              r: 25
+            }],
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderWidth: 0
+          }, {
+            type: 'bar',
+            label: 'server 1',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 0
+          }, {
+            type: 'bar',
+            label: 'server 2',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 0
+          }, {
+            type: 'bar',
+            label: 'server 3',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+            borderWidth: 0
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
