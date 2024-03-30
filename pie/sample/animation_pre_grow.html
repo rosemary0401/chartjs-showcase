@@ -6,17 +6,16 @@
   <body>
     <h2>2022 Foundry Revenue</h2>
     <canvas id="pieChart" width="1000" height="300"></canvas>
-    <button id="btnRedraw">redraw again</button>
-    <button id="btnGrow">grow me</button>
     <button id="btnFakeGrowAdd">fake grow add</button>
     <script>
-      let countries = ["Taiwan", "Korea", "China", "Others"];
-      let countryShare = [66, 17, 8, 9];
+      let countries = ["Taiwan", "Korea", "China", "Others", "Japan"];
+      let countryShare = [66, 17, 8, 9, 0];
       let countryColors =[
         'rgba(75, 192, 192, 1)',
         'rgba(54, 162, 235, 1)',
         'rgba(255, 99, 132, 1)',
-        'rgba(255, 206, 86, 1)'
+        'rgba(255, 206, 86, 1)',
+        'rgba(153, 102, 255, 1)',
       ];
 
       let initData = {
@@ -38,40 +37,9 @@
         });
       }
 
-      document.getElementById('btnRedraw').addEventListener('click', function() {
-        
-        initData.labels = ["Taiwan", "Korea", "China", "Others"];
-        initData.datasets = [{
-            data: [100, 13, 9, 11],
-            backgroundColor: [
-              'rgba(75, 192, 192, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 206, 86, 1)'
-            ]
-          }
-        ];
-
-        window.myBar.update();
-      });
-
-      document.getElementById('btnGrow').addEventListener('click', function() {
-        initData.labels = ["Taiwan", "Korea", "China", "Others"];
-        initData.datasets[0].data = [100, 13, 9, 11];
-
-        window.myBar.update();
-      });
-
       document.getElementById('btnFakeGrowAdd').addEventListener('click', function() {
         initData.labels = ["Taiwan", "Korea", "China", "Others", "Japan"];
         initData.datasets[0].data = [64, 13, 9, 11, 3];
-        initData.datasets[0].backgroundColor = [
-          'rgba(75, 192, 192, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 99, 132, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 206, 86, 1)',
-        ]
 
         window.myBar.update();
       });
