@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels@0.1.4/dist/chartjs-plugin-piechart-outlabels.min.js"></script> -->
+  </head>
+  <body>
+    <h2>2022 Foundry Revenue</h2>
+    <canvas id="pieChart" width="1000" height="300"></canvas>
+    <button id="btnUpdate">update me</button>
+    <script>
+      let updateTimes = 1;
+      let countries = ["Taiwan", "Korea", "China", "Others"];
+      let countryShare = [66, 17, 8, 9];
+      let countryColors =[
+        'rgba(75, 192, 192, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 206, 86, 1)'
+      ];
+
+      let initData = {
+        labels: countries,
+        datasets: [{
+          data: countryShare,
+          backgroundColor: countryColors
+        }]
+      };
+
+      window.onload = function() {
+        var ctxPie = document.getElementById("pieChart");
+        window.myBar = new Chart(ctxPie, {
+          type: 'doughnut',
+          data: initData,
+          options: {
+            legend: false
+          }
+        });
+      }
+
+      document.getElementById('btnUpdate').addEventListener('click', function() {
+        if (updateTimes === 0) {
+          return;
+        }
+
+        initData.labels = ["Taiwan", "Korea", "China", "Others", "Japan"];
+        initData.datasets = [{
+            data: [64, 13, 9, 11, 3],
+            backgroundColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(153, 102, 255, 1)'
+            ]
+          }
+        ];
+
+        updateTimes -= 1;
+
+        window.myBar.update();
+      });
+    </script>
+  </body>
+</html>
