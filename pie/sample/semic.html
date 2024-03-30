@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels@0.1.4/dist/chartjs-plugin-piechart-outlabels.min.js"></script> -->
+  </head>
+  <body>
+    <h2>2022 Foundry Revenue</h2>
+    <canvas id="pieChart" width="1000" height="300"></canvas>
+    <script>
+      var ctxPie = document.getElementById("pieChart");
+      var pieChart = new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+          labels: ["Taiwan", "Korea", "China", "Others", "TSMC", "UMC", "PSMC", "Vanguard", "Samsung", "DBHiTek", "SMIC", "HH Group", "Nexchip", "GF", "Tower", "Others"],
+          datasets: [{
+            data: [null, null, null, null, 56, 7, 1, 2, 16, 1, 4, 2, 2, 6, 1, 2],
+            backgroundColor: [
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(255, 255, 255, 1)',
+              'rgba(75, 192, 192, 0.8)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(75, 192, 192, 0.4)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.8)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 99, 132, 0.8)',
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(255, 99, 132, 0.4)',
+              'rgba(255, 206, 86, 0.8)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(255, 206, 86, 0.4)'
+            ]
+          }, {
+            data: [66, 17, 8, 9, null, null, null, null, null, null, null, null, null, null, null, null],
+            backgroundColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              
+            ]
+          }]
+        },
+        options: {
+          legend: false
+        }
+      });
+    </script>
+  </body>
+</html>
