@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels@0.1.4/dist/chartjs-plugin-piechart-outlabels.min.js"></script> -->
+  </head>
+  <body>
+    <h2>2022 Foundry Revenue (TrendForce)</h2>
+    <canvas id="pieChart" width="1000" height="300"></canvas>
+    <button id="btnUpdate">update me</button>
+    <script>
+      Chart.defaults.global.animation.duration = 15000;
+
+      let updateTimes = 1;
+      let countries = ["Taiwan", "Korea", "China", "Japan", "Others", "TSMC", "UMC", "PSMC", "Vanguard", "Samsung", "DBHiTek", "SMIC", "HH Group", "Nexchip", "JASM", "PSMC", "GF", "Tower", "Others"];
+      let companyShare = [null, null, null, null, null, 56, 7, 1, 2, 16, 1, 4, 2, 2, 0, 0, 6, 1, 2];
+      let countryShare = [66, 17, 8, 0, 9, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+      let countryColors = [
+        'rgba(75, 192, 192, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 206, 86, 1)',
+      ];
+      let companyColors = [
+        'rgba(255, 255, 255, 1)',
+        'rgba(255, 255, 255, 1)',
+        'rgba(255, 255, 255, 1)',
+        'rgba(255, 255, 255, 1)',
+        'rgba(255, 255, 255, 1)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(75, 192, 192, 0.4)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(255, 99, 132, 0.4)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(255, 206, 86, 0.4)'
+      ];
+
+      let initData = {
+        labels: countries,
+        datasets: [{
+          data: companyShare,
+          backgroundColor: companyColors
+        }, {
+          data: countryShare,
+          backgroundColor: countryColors
+        }],
+        // options: {
+        //   animation: {
+        //     duration: 15000,
+        //   }
+        // }
+      };
+
+      window.onload = function() {
+        var ctxPie = document.getElementById("pieChart");
+        window.myBar = new Chart(ctxPie, {
+          type: 'doughnut',
+          data: initData,
+          options: {
+            legend: false
+          }
+        });
+      }
+
+      document.getElementById('btnUpdate').addEventListener('click', function() {
+        if (updateTimes === 0) {
+          return;
+        }
+
+        initData.datasets[0].data = [null, null, null, null, null, 56, 6, 1, 1, 12, 1, 5, 3, 1, 2, 1, 6, 1, 4];
+        initData.datasets[1].data = [64, 13, 9, 3, 11, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+
+        updateTimes -= 1;
+
+        window.myBar.update();
+      });
+    </script>
+  </body>
+</html>
